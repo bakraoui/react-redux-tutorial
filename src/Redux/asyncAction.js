@@ -56,12 +56,29 @@ const reducer = (state = initialState,action) => {
             error : action.payload
         }
     
-        default:
-            break;
+    }
+}
+
+// fetch data 
+
+const  fetchData = () => {
+    return function(dispatch) {
+        dispatch(fetchdatarequest())
+        axios.get('API endpoint')
+        .then(response => {
+            const users = response.data
+            dispatch(fetchdatasuccess(users))
+        })
+        .catch(error => {
+            dispatch(fetchdatafailure(error.message))
+        })
     }
 }
 
 // store 
 
-
 const store = createStore(reducer, applyMiddleware(thunkmiddleware))
+
+store.subscribe(() => console.log(store.getState()))
+
+store.dispatch(fetchData())
